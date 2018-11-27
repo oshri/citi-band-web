@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.scss';
 import JoinForm from './components/JoinForm/JoinForm';
 import ApiService from './shared/api-service/ApiService';
+import Users from './components/Users/Users';
 
 const userKey = 'user';
 
@@ -89,38 +90,13 @@ class App extends Component {
         }));
         return (
             <div>
-                {users.length > 0 ? this.getUsersTable(users) : <div>No Users Found</div>}
+                {users.length > 0 ? <Users currentUser={this.state.user} users={users} /> : <div>No Users Found</div>}
                 <div className="App__reset-btn">
                     <button type="button" onClick={this.resetAllParts.bind(this)}>
                         Remove All Participants
                     </button>
                 </div>
             </div>
-        );
-    }
-
-    getUsersTable(users) {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <td>Id</td>
-                        <td>Name</td>
-                        <td>Instrument</td>
-                        <td>Notes</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user, index) => (
-                        <tr key={index} className={user.id === this.state.user.id ? 'App__isUserRow' : ''}>
-                            <td>{user.id}</td>
-                            <td>{user.name}</td>
-                            <td>{user.instrument}</td>
-                            <td>{user.notes.join(', ')}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         );
     }
 
