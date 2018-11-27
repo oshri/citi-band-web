@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ApiService from '../../shared/api-service/ApiService';
 import './JoinForm.scss';
 
 class JoinForm extends Component {
@@ -7,7 +8,8 @@ class JoinForm extends Component {
 
         this.state = {
             name: '',
-            instrument: ''
+            instrument: '',
+            joining: false
         };
     }
 
@@ -26,7 +28,13 @@ class JoinForm extends Component {
             return alert('Please select instrument');
         }
 
-        //TODO Send API request
+        this.setState({ joining: true });
+        ApiService.joinRoom(this.state.name, this.state.instrument)
+            .then(result => {
+                console.log('result', result);
+            })
+            .catch(error => console.error('error', error))
+            .finally(() => this.setState({ joining: false }));
     }
 
     selectInstrument(instrument) {
@@ -41,9 +49,9 @@ class JoinForm extends Component {
                     this.isSelected(instrument) ? 'JoinForm__instrument--selected' : ''
                 }`}
             >
-                <button type="button" onClick={() => this.selectInstrument(instrument)}>
+                <div className="JoinForm__instrument__button" onClick={() => this.selectInstrument(instrument)}>
                     <img src={require(`../../assets/icons/${instrument}.svg`)} alt={instrument} />
-                </button>
+                </div>
             </div>
         );
     }
@@ -52,7 +60,17 @@ class JoinForm extends Component {
         return instrument === this.state.instrument;
     }
 
-    render() {
+    getJoiningView() {
+        const style = {
+            textAlign: 'center',
+            margin: '20px 0',
+            fontSize: '2rem'
+        };
+
+        return <div style={style}>Joining...</div>;
+    }
+
+    getJoinFormView() {
         return (
             <form className="JoinForm" onSubmit={this.handleSubmit.bind(this)}>
                 <h2>Join Room</h2>
@@ -65,9 +83,13 @@ class JoinForm extends Component {
                     {this.getInstrumentButton('piano')}
                     {this.getInstrumentButton('drums')}
                 </div>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Join" />
             </form>
         );
+    }
+
+    render() {
+        return this.state.joining ? this.getJoiningView() : this.getJoinFormView();
     }
 }
 
