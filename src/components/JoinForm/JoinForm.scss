@@ -1,0 +1,41 @@
+.JoinForm {
+    width: 100%;
+    text-align: center;
+
+    &__input-container {
+        margin: 10px 0;
+
+        label {
+            margin-right: 10px;
+        }
+    }
+
+    &__instruments-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+
+        button {
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+    }
+
+    &__instrument {
+        height: 50px;
+        width: 50px;
+        margin: 0 10px;
+        padding: 3px;
+
+        &--selected {
+            border: 1px solid black;
+            padding: 2px;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
