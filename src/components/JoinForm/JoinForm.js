@@ -59,9 +59,12 @@ class JoinForm extends Component {
         ApiService.submitPart(this.state.id, this.state.name, this.state.instrument, [])
             .then(result => {
                 console.log('result', result);
+                this.props.onJoin({ id: this.state.id, name: this.state.name, instrument: this.state.instrument });
             })
-            .catch(error => console.error('Failed to join', error))
-            .finally(() => this.setState({ joining: false }));
+            .catch(error => {
+                console.error('Failed to join', error);
+                this.setState({ joining: false });
+            });
     }
 
     selectInstrument(instrument) {
