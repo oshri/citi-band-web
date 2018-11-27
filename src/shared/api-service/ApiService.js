@@ -17,8 +17,13 @@ function getLastId() {
     });
 }
 
+function reset() {
+    return axios.delete(`${baseUrl}/part`);
+}
+
 export default {
     getParts,
     submitPart,
-    getLastId
+    getLastId,
+    reset
 };

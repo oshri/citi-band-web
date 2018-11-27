@@ -12,12 +12,27 @@ class JoinForm extends Component {
             joining: false,
             id: '',
             gettingLastId: true,
-            failedLastId: false
+            failedLastId: false,
+            didMount: false
         };
+
+        this.getLastId();
+    }
+
+    componentDidMount() {
+        this.setState({ didMount: true });
+    }
+
+    getLastId() {
+        if (this.state.didMount) {
+            this.setState({ gettingLastId: true });
+        }
 
         ApiService.getLastId()
             .then(lastId => {
-                this.setState({ id: lastId ? lastId + 1 : 0 });
+                const id = typeof lastId === 'undefined' || isNaN(lastId) ? 0 : lastId + 1;
+                console.log('id', id);
+                this.setState({ id });
             })
             .catch(error => {
                 console.error('Failed to get last id', error);
@@ -83,6 +98,15 @@ class JoinForm extends Component {
         return <div style={style}>{label}</div>;
     }
 
+    resetAllParts() {
+        ApiService.reset()
+            .then(result => {
+                console.log('reset result', result);
+                return this.getLastId();
+            })
+            .catch(error => console.error('reset error', error));
+    }
+
     getJoinFormView() {
         return (
             <form className="JoinForm" onSubmit={this.handleSubmit.bind(this)}>
@@ -97,6 +121,11 @@ class JoinForm extends Component {
                     {this.getInstrumentButton('drums')}
                 </div>
                 <input type="submit" value="Join" />
+                <div className="JoinForm__reset-btn">
+                    <button type="button" onClick={this.resetAllParts.bind(this)}>
+                        Remove All Participants
+                    </button>
+                </div>
             </form>
         );
     }
