@@ -5,16 +5,20 @@ function getParts() {
     return axios.get(`${baseUrl}/part`).then(result => result.data);
 }
 
-function submitPart(id, instrument, notes) {
-    return axios.post(`${baseUrl}/part/${id}`, { instrument, notes }).then(result => result.data);
+function submitPart(id, name, instrument, notes) {
+    return axios.post(`${baseUrl}/part/${id}`, { name, instrument, notes }).then(result => result.data);
 }
 
-function joinRoom(name, instrument) {
-    return new Promise(resolve => setTimeout(() => resolve({ name, instrument }), 1000));
+function getLastId() {
+    return getParts().then(result => {
+        const ids = Object.keys(result).map(id => parseInt(id, 10));
+
+        return ids.sort()[ids.length - 1];
+    });
 }
 
 export default {
     getParts,
     submitPart,
-    joinRoom
+    getLastId
 };

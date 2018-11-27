@@ -9,8 +9,21 @@ class JoinForm extends Component {
         this.state = {
             name: '',
             instrument: '',
-            joining: false
+            joining: false,
+            id: '',
+            gettingLastId: true,
+            failedLastId: false
         };
+
+        ApiService.getLastId()
+            .then(lastId => {
+                this.setState({ id: lastId ? lastId + 1 : 0 });
+            })
+            .catch(error => {
+                console.error('Failed to get last id', error);
+                this.setState({ failedLastId: true });
+            })
+            .finally(() => this.setState({ gettingLastId: false }));
     }
 
     handleName(event) {
@@ -29,11 +42,11 @@ class JoinForm extends Component {
         }
 
         this.setState({ joining: true });
-        ApiService.joinRoom(this.state.name, this.state.instrument)
+        ApiService.submitPart(this.state.id, this.state.name, this.state.instrument, [])
             .then(result => {
                 console.log('result', result);
             })
-            .catch(error => console.error('error', error))
+            .catch(error => console.error('Failed to join', error))
             .finally(() => this.setState({ joining: false }));
     }
 
@@ -60,14 +73,14 @@ class JoinForm extends Component {
         return instrument === this.state.instrument;
     }
 
-    getJoiningView() {
+    getProgressView(label) {
         const style = {
             textAlign: 'center',
             margin: '20px 0',
             fontSize: '2rem'
         };
 
-        return <div style={style}>Joining...</div>;
+        return <div style={style}>{label}</div>;
     }
 
     getJoinFormView() {
@@ -89,7 +102,15 @@ class JoinForm extends Component {
     }
 
     render() {
-        return this.state.joining ? this.getJoiningView() : this.getJoinFormView();
+        if (this.state.failedLastId) {
+            return this.getProgressView('ERROR: Failed to get last id');
+        }
+
+        if (this.state.gettingLastId) {
+            return this.getProgressView('Loading...');
+        }
+
+        return this.state.joining ? this.getProgressView('Joining...') : this.getJoinFormView();
     }
 }
 
