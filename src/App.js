@@ -20,12 +20,27 @@ class App extends Component {
 
         ApiService.getParts()
             .then(parts => {
+                if (this.state.user && !this.isUserInParts(parts)) {
+                    this.removeUser();
+                }
+
                 this.setState({ allUsers: parts, loading: false });
             })
             .catch(error => {
                 console.log('failed to get other users', error);
                 this.setState({ loading: false, hasError: true });
             });
+    }
+
+    removeUser() {
+        localStorage.removeItem(userKey);
+        this.setState({ user: null });
+    }
+
+    isUserInParts(parts) {
+        return Object.keys(parts)
+            .map(id => parts[id].name)
+            .some(name => name === this.state.user.name);
     }
 
     getProgressView(label) {
@@ -62,7 +77,7 @@ class App extends Component {
         ApiService.reset()
             .then(result => {
                 console.log('reset result', result);
-                this.setState({ user: null });
+                this.removeUser();
             })
             .catch(error => console.error('reset error', error));
     }
@@ -74,32 +89,38 @@ class App extends Component {
         }));
         return (
             <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Id</td>
-                            <td>Name</td>
-                            <td>Instrument</td>
-                            <td>Notes</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user, index) => (
-                            <tr key={index} className={user.id === this.state.user.id ? 'App__isUserRow' : ''}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.instrument}</td>
-                                <td>{user.notes}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {users.length > 0 ? this.getUsersTable(users) : <div>No Users Found</div>}
                 <div className="App__reset-btn">
                     <button type="button" onClick={this.resetAllParts.bind(this)}>
                         Remove All Participants
                     </button>
                 </div>
             </div>
+        );
+    }
+
+    getUsersTable(users) {
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Instrument</td>
+                        <td>Notes</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user, index) => (
+                        <tr key={index} className={user.id === this.state.user.id ? 'App__isUserRow' : ''}>
+                            <td>{user.id}</td>
+                            <td>{user.name}</td>
+                            <td>{user.instrument}</td>
+                            <td>{user.notes.join(', ')}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         );
     }
 
