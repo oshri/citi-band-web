@@ -80,7 +80,7 @@ class JoinForm extends Component {
                 }`}
             >
                 <div className="JoinForm__instrument__button" onClick={() => this.selectInstrument(instrument)}>
-                    <img src={require(`../../assets/icons/${instrument}.svg`)} alt={instrument} />
+                    <img src={require(`../../assets/icons/${instrument}.png`)} alt={instrument} />
                 </div>
             </div>
         );
