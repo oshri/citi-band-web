@@ -37,7 +37,12 @@ class JoinForm extends Component {
             .then(result => {
                 console.log('result', result);
                 this.setState({ joining: false });
-                this.props.onJoin({ id: this.state.id, name: this.state.name, instrument: this.state.instrument });
+                this.props.onJoin({
+                    id: this.state.id,
+                    name: this.state.name,
+                    instrument: this.state.instrument,
+                    notes: []
+                });
             })
             .catch(error => {
                 console.error('Failed to join', error);
