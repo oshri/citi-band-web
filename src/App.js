@@ -91,11 +91,17 @@ class App extends Component {
         return (
             <div>
                 {users.length > 0 ? <Users currentUser={this.state.user} users={users} /> : <div>No Users Found</div>}
-                <div className="App__reset-btn">
-                    <button type="button" onClick={this.resetAllParts.bind(this)}>
-                        Remove All Participants
-                    </button>
-                </div>
+                {this.displayResetButton()}
+            </div>
+        );
+    }
+
+    displayResetButton() {
+        return (
+            <div className="App__reset-btn">
+                <button type="button" onClick={this.resetAllParts.bind(this)}>
+                    Remove All Participants
+                </button>
             </div>
         );
     }
@@ -106,7 +112,12 @@ class App extends Component {
         }
 
         if (this.state.hasError) {
-            return this.getProgressView('ERROR: Failed to load app');
+            return (
+                <div>
+                    {this.getProgressView('ERROR: Failed to load app')}
+                    {this.displayResetButton()}
+                </div>
+            );
         }
 
         return <div>{this.state.user ? this.displayUsers() : this.displayJoinForm()}</div>;
