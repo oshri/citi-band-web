@@ -28,9 +28,8 @@ class JoinForm extends Component {
             this.setState({ gettingLastId: true });
         }
 
-        ApiService.getLastId()
-            .then(lastId => {
-                const id = typeof lastId === 'undefined' || isNaN(lastId) ? 0 : lastId + 1;
+        ApiService.getUserId()
+            .then(id => {
                 console.log('id', id);
                 this.setState({ id });
             })
