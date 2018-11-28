@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Slider from './Slider/Slider';
 import './Instrument.scss';
 
@@ -18,13 +18,13 @@ export class Instrument extends Component {
         newNotes.splice(index, 1, value < 0 ? null : value);
 
         this.props.onChange(newNotes);
-        this.setState({ notes: newNotes });
+        this.setState({notes: newNotes});
     }
 
     renderSliders() {
         return this.state.notes.map((note, i) => (
             <div key={i} className="Instrument__slider">
-                <Slider index={i} value={this.state.notes[i]} onChange={this.handleSliderChange.bind(this)} />
+                <Slider index={i} value={this.state.notes[i]} onChange={this.handleSliderChange.bind(this)}/>
             </div>
         ));
     }
@@ -32,7 +32,7 @@ export class Instrument extends Component {
     render() {
         return (
             <div className="Instrument__container">
-                <h2>Instrument: {this.state.instrument}</h2>
+                <div style={{marginRight:'20px'}}><img src={require(`../../assets/icons/${this.state.instrument}.png`)} alt={this.state.instrument} /></div>
                 <div className="Instrument__sliders-container">{this.renderSliders()}</div>
             </div>
         );
