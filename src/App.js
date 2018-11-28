@@ -165,7 +165,7 @@ class App extends Component {
             return (
                 <div>
                     {this.getProgressView('ERROR: Failed to load app')}
-                    {this.displayResetButton()}
+                    {/*{this.displayResetButton()}*/}
                 </div>
             );
         }
