@@ -42,6 +42,7 @@ class App extends Component {
 
     isUserInParts(parts) {
         return Object.keys(parts)
+            .filter(id => !!parts[id])
             .map(id => parts[id].name)
             .some(name => name === this.state.user.name);
     }
