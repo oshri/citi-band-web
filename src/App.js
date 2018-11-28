@@ -3,6 +3,7 @@ import './App.scss';
 import JoinForm from './components/JoinForm/JoinForm';
 import ApiService from './shared/api-service/ApiService';
 import Users from './components/Users/Users';
+import Instrument from './components/Instrument/Instrument';
 
 const userKey = 'user';
 
@@ -83,6 +84,10 @@ class App extends Component {
             .catch(error => console.error('reset error', error));
     }
 
+    displayInstrument() {
+        return <Instrument instrument={this.state.user.instrument} />;
+    }
+
     displayUsers() {
         const users = Object.keys(this.state.allUsers).map(id => ({
             id: parseInt(id, 10),
@@ -120,7 +125,7 @@ class App extends Component {
             );
         }
 
-        return <div>{this.state.user ? this.displayUsers() : this.displayJoinForm()}</div>;
+        return <div>{this.state.user ? this.displayInstrument() : this.displayJoinForm()}</div>;
     }
 }
 
