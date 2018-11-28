@@ -26,7 +26,7 @@ class Slider extends Component {
                     max={100}
                     tooltip={false}
                     value={this.state.value}
-                    handleLabel={this.state.value}
+                    handleLabel={this.state.value + ''}
                     orientation="vertical"
                     onChange={this.handleChange.bind(this)}
                 />
