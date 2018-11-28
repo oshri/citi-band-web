@@ -1,0 +1,17 @@
+.Instrument {
+    &__sliders-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__slider {
+        margin: 0 5px;
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

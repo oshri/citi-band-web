@@ -6,6 +6,7 @@ import Users from './components/Users/Users';
 import Instrument from './components/Instrument/Instrument';
 
 const userKey = 'user';
+const notesKey = 'notes';
 
 class App extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class App extends Component {
 
     removeUser() {
         localStorage.removeItem(userKey);
+        localStorage.removeItem(notesKey);
         this.setState({ user: null });
     }
 
@@ -84,8 +86,37 @@ class App extends Component {
             .catch(error => console.error('reset error', error));
     }
 
+    buildNotesArray(numOfSliders) {
+        const notes = [];
+        for (let i = 0; i < numOfSliders; i++) {
+            notes.push(null);
+        }
+
+        return notes;
+    }
+
     displayInstrument() {
-        return <Instrument instrument={this.state.user.instrument} />;
+        const notes = JSON.parse(localStorage.getItem(notesKey)) || this.buildNotesArray(16);
+
+        return (
+            <Instrument
+                instrument={this.state.user.instrument}
+                notes={notes}
+                onChange={this.handleInstrumentChange.bind(this)}
+            />
+        );
+    }
+
+    handleInstrumentChange(notes) {
+        const { id, name, instrument } = this.state.user;
+        ApiService.submitPart(id, name, instrument, notes)
+            .then(result => {
+                console.log('Updated notes', result);
+                localStorage.setItem(notesKey, JSON.stringify(notes));
+            })
+            .catch(error => {
+                console.error('Failed to update notes', error);
+            });
     }
 
     displayUsers() {
