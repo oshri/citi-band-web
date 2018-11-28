@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://18.191.23.1:5000';
+const baseUrl = 'http://ec2-18-191-23-1.us-east-2.compute.amazonaws.com:5000';
 
 function getParts() {
     return axios.get(`${baseUrl}/part`).then(result => result.data);
