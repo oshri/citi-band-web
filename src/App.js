@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {Button, ButtonGroup} from 'react-bootstrap';
+
 import './App.scss';
 import JoinForm from './components/JoinForm/JoinForm';
 import ApiService from './shared/api-service/ApiService';
@@ -92,7 +94,7 @@ class App extends Component {
         }
 
         const preset = JSON.parse(localStorage.getItem(presetKey));
-        this.saveUser({ ...this.state.user, notes: preset });
+        this.saveUser({...this.state.user, notes: preset});
         window.location.reload();
     }
 
@@ -109,12 +111,14 @@ class App extends Component {
                     onChange={this.handleInstrumentChange.bind(this)}
                 />
                 <div className="App__buttons">
-                    <button onClick={this.loadPreset.bind(this)} type="button">
-                        Load Preset
-                    </button>
-                    <button onClick={this.savePreset.bind(this)} type="button">
-                        Save Preset
-                    </button>
+                    <ButtonGroup bsSize="large">
+                        <Button onClick={this.loadPreset.bind(this)}>
+                            Load Preset
+                        </Button>
+                        <Button onClick={this.savePreset.bind(this)}>
+                            Save Preset
+                        </Button>
+                    </ButtonGroup>
                 </div>
             </div>
         );
@@ -149,9 +153,9 @@ class App extends Component {
     displayResetButton() {
         return (
             <div className="App__reset-btn">
-                <button type="button" onClick={this.resetAllParts.bind(this)}>
+                <Button onClick={this.resetAllParts.bind(this)}>
                     Remove All Participants
-                </button>
+                </Button>
             </div>
         );
     }

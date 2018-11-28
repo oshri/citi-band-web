@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "lodash.debounce": "^4.0.8",
     "react": "^16.6.3",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-rangeslider": "^2.2.0",
     "react-redux": "^5.1.1",
