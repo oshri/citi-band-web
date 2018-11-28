@@ -164,7 +164,7 @@ class App extends Component {
         if (this.state.hasError) {
             return (
                 <div>
-                    {this.getProgressView('ERROR: Failed to load app')}
+                    {this.getProgressView('ERROR: Failed to load CitiBand Player')}
                     {/*{this.displayResetButton()}*/}
                 </div>
             );
