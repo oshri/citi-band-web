@@ -15,7 +15,7 @@ export class Instrument extends Component {
     handleSliderChange(index, value) {
         console.log('Change', index, value);
         const newNotes = this.state.notes.slice();
-        newNotes.splice(index, 1, value);
+        newNotes.splice(index, 1, value < 0 ? null : value);
 
         this.props.onChange(newNotes);
         this.setState({ notes: newNotes });
