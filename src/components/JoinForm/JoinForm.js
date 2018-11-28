@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ApiService from '../../shared/api-service/ApiService';
 import './JoinForm.scss';
+import Utils from '../../Utils';
 
 class JoinForm extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class JoinForm extends Component {
                     id: this.state.id,
                     name: this.state.name,
                     instrument: this.state.instrument,
-                    notes: []
+                    notes: Utils.buildNotesArray()
                 });
             })
             .catch(error => {

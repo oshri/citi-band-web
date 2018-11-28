@@ -6,7 +6,7 @@ import Users from './components/Users/Users';
 import Instrument from './components/Instrument/Instrument';
 
 const userKey = 'user';
-const notesKey = 'notes';
+const presetKey = 'preset';
 
 class App extends Component {
     constructor(props) {
@@ -37,7 +37,6 @@ class App extends Component {
 
     removeUser() {
         localStorage.removeItem(userKey);
-        localStorage.removeItem(notesKey);
         this.setState({ user: null });
     }
 
@@ -57,8 +56,8 @@ class App extends Component {
         return <div style={style}>{label}</div>;
     }
 
-    onJoin(user) {
-        console.log('onJoin', user);
+    saveUser(user) {
+        console.log('saveUser', user);
         localStorage.setItem(userKey, JSON.stringify(user));
         this.setState({ user, allUsers: { ...this.state.allUsers, [user.id]: user } });
     }
@@ -74,7 +73,7 @@ class App extends Component {
     }
 
     displayJoinForm() {
-        return <JoinForm onJoin={this.onJoin.bind(this)} userId={this.getNewUserId()} />;
+        return <JoinForm onJoin={this.saveUser.bind(this)} userId={this.getNewUserId()} />;
     }
 
     resetAllParts() {
@@ -86,24 +85,37 @@ class App extends Component {
             .catch(error => console.error('reset error', error));
     }
 
-    buildNotesArray(numOfSliders) {
-        const notes = [];
-        for (let i = 0; i < numOfSliders; i++) {
-            notes.push(null);
+    loadPreset() {
+        if (!localStorage.getItem(presetKey)) {
+            return alert('No preset found');
         }
 
-        return notes;
+        const preset = JSON.parse(localStorage.getItem(presetKey));
+        this.saveUser({ ...this.state.user, notes: preset });
+        window.location.reload();
+    }
+
+    savePreset() {
+        localStorage.setItem(presetKey, JSON.stringify(this.state.user.notes));
     }
 
     displayInstrument() {
-        const notes = JSON.parse(localStorage.getItem(notesKey)) || this.buildNotesArray(16);
-
         return (
-            <Instrument
-                instrument={this.state.user.instrument}
-                notes={notes}
-                onChange={this.handleInstrumentChange.bind(this)}
-            />
+            <div>
+                <Instrument
+                    instrument={this.state.user.instrument}
+                    notes={this.state.user.notes}
+                    onChange={this.handleInstrumentChange.bind(this)}
+                />
+                <div className="App__buttons">
+                    <button onClick={this.loadPreset.bind(this)} type="button">
+                        Load Preset
+                    </button>
+                    <button onClick={this.savePreset.bind(this)} type="button">
+                        Save Preset
+                    </button>
+                </div>
+            </div>
         );
     }
 
@@ -112,7 +124,8 @@ class App extends Component {
         ApiService.submitPart(id, name, instrument, notes)
             .then(result => {
                 console.log('Updated notes', result);
-                localStorage.setItem(notesKey, JSON.stringify(notes));
+                // localStorage.setItem(notesKey, JSON.stringify(notes));
+                this.saveUser({ ...this.state.user, notes });
             })
             .catch(error => {
                 console.error('Failed to update notes', error);

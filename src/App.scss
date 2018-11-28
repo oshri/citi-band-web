@@ -8,6 +8,16 @@
     &__isUserRow {
         background-color: rgba(0, 0, 0, 0.2);
     }
+
+    &__buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+
+        button {
+            margin: 0 10px;
+        }
+    }
 }
 
 .App-logo {
